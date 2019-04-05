@@ -1,14 +1,18 @@
 class Game {
   constructor() {
     this.deck = null;
-    this.emptyPiles = [];
+    this.reservedPiles = [];
     this.showCardPile = null;
+    this.stackPiles = [];
   }
   addShuffledPile(pile) {
     this.deck = pile;
   }
-  addEmptyPile(pile) {
-    this.emptyPiles.push(pile);
+  addReservedPile(pile) {
+    this.reservedPiles.push(pile);
+  }
+  addStackPile(pile) {
+    this.stackPiles.push(pile);
   }
   setShowCardPile(pile) {
     this.showCardPile = pile;
@@ -23,15 +27,23 @@ class Game {
     return this.showCardPile.getLastCard().getUnicode();
 
   }
-  addCardToPile(id, des) {
+  addCardToReservedPile(id, des) {
     if (des === "showCard") {
-      this.emptyPiles[id].addCard(this.showCardPile.drawCard());
+      this.reservedPiles[id].addCard(this.showCardPile.drawCard());
       return;
     }
-    this.emptyPiles[id].addCard(this.emptyPiles[des].drawCard())
+    this.reservedPiles[id].addCard(this.reservedPiles[des].drawCard())
   }
-  isDraggable() {
-    return this.showCardPile.cards.length > 1;
+  addCardToStackPile(id, des) {
+    if (des === "showCard") {
+      this.stackPiles[id].addCard(this.showCardPile.drawCard());
+      return;
+    }
+    this.stackPiles[id].addCard(this.stackPiles[des].drawCard())
+  }
+
+  isDraggable(pile) {
+    return pile.isDraggable();
   }
 }
 

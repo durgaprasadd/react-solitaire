@@ -12,10 +12,11 @@ class Pile {
     return this.cards.pop();
   }
   getUnicode() {
-    return this.getLastCard().getUnicode();
+    if (this.getLastCard())
+      return this.getLastCard().getUnicode();
   }
   isDraggable() {
-    return this.cards.length > 1;
+    return this.cards.length > 0;
   }
 }
 
