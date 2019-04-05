@@ -1,10 +1,3 @@
-.card{
-  font-size: 150px;
-}
-
-.hide{
-  display: none;
-}
 
 .emptyDiv{
   width:300px;
@@ -15,15 +8,40 @@
 .deck{
   display: flex;
   flex-direction: row;
+  margin-left: 10px;
 }
 
 .main {
   display: flex;
   justify-content: space-around;
+  margin: 10px;
 }
 
 .stackPile{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin: 20px;
+}
+
+.stackCard,.card {
+    width: 110px;
+    font-size: 160px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    position: relative;
+    border-radius: 5px;
+    margin-left: 10px;
+    border: 1px solid black;
+}
+
+.stackCard{
+    margin: -100px;
+}
+
+.stack{
+  margin: 100px;
 }

@@ -11,10 +11,6 @@ class Pile {
   drawCard() {
     return this.cards.pop();
   }
-  getUnicode() {
-    if (this.getLastCard())
-      return this.getLastCard().getUnicode();
-  }
   isDraggable() {
     return this.cards.length > 0;
   }

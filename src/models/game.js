@@ -20,11 +20,9 @@ class Game {
   changeCard() {
     this.showCardPile.addCard(this.deck.drawCard());
   }
-  getEmptyPileUnicode() {
-    return this.emptyPile.getLastCard().getUnicode();
-  }
-  getShowCardUnicode() {
-    return this.showCardPile.getLastCard().getUnicode();
+
+  getTopMostCard() {
+    return this.showCardPile.getLastCard();
 
   }
   addCardToReservedPile(id, des) {

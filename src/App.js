@@ -25,7 +25,7 @@ class App extends Component {
 
   initializeReservedPiles(game, range) {
     for (let index = 0; index < range; index++) {
-      game.addReservedPile(this.initPile());
+      game.addReservedPile(new Pile());
     }
   }
 
@@ -34,47 +34,42 @@ class App extends Component {
       game.addStackPile(new Pile);
     }
   }
+
   initializeGame() {
     const game = new Game();
     game.addShuffledPile(this.initializePile());
     this.initializeReservedPiles(game, 4);
     this.initializeStackPiles(game, 7);
-    game.setShowCardPile(this.initPile())
+    game.setShowCardPile(new Pile());
     return game;
-  }
-
-  initPile() {
-    const pile = new Pile();
-    pile.addCard(emptyCard);
-    return pile;
   }
 
   allowDrop(event) {
     event.preventDefault();
   }
 
-  drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
+  drag(event) {
+    event.dataTransfer.setData("id", event.target.id);
   }
 
 
-  dropInReservedPile(ev) {
-    ev.preventDefault();
-    const id = ev.target.id;
-    const data = ev.dataTransfer.getData("text");
+  dropInReservedPile(event) {
+    event.preventDefault();
+    const destination = event.target.id;
+    const src = event.dataTransfer.getData("id");
     this.setState(state => {
       const { game } = state;
-      game.addCardToReservedPile(id, data)
+      game.addCardToReservedPile(destination, src)
       return { game }
     })
   }
 
-  dropInStackPile(id, ev) {
-    ev.preventDefault();
-    const data = ev.dataTransfer.getData("text");
+  dropInStackPile(destination, event) {
+    event.preventDefault();
+    const src = event.dataTransfer.getData("id");
     this.setState(state => {
       const { game } = state;
-      game.addCardToStackPile(id, data)
+      game.addCardToStackPile(destination, src)
       return { game }
     })
   }
@@ -87,35 +82,42 @@ class App extends Component {
     })
   }
 
-  showRandomCard() {
-    const id = this.state.game.getShowCardUnicode();
-    return <div id="showCard" className="card" draggable={this.state.game.showCardPile.isDraggable()} onDragStart={this.drag}>{id}</div>;
+  showTopMostCard() {
+    let card = this.state.game.getTopMostCard();
+    if (!card) card = emptyCard;
+    return <div id="showCard" className="card" style={this.getColor(card)} draggable={this.state.game.showCardPile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>;
   }
 
   showAllReservedPiles() {
     const piles = this.state.game.reservedPiles;
     return piles.map((pile, index) => {
-      return <div className="card" id={index} onDrop={this.dropInReservedPile.bind(this)} onDragOver={this.allowDrop} draggable={pile.isDraggable()} onDragStart={this.drag}>{pile.getUnicode()}</div>
+      let card = pile.getLastCard();
+      if (!card) card = emptyCard;
+      return <div className="card" style={this.getColor(card)} id={index} onDrop={this.dropInReservedPile.bind(this)} onDragOver={this.allowDrop} draggable={pile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>
     })
   }
 
-  showAllStackCards(pile) {
-    if (pile.cards.length == 0) return <div className="card">{emptyCard.getUnicode()}</div>
-    return pile.cards.map(card => <div className="card">{card.getUnicode()}</div>)
+  getColor(card) {
+    return { color: card.color }
+  }
+
+  showAllStackCards(pile, index) {
+    if (pile.cards.length == 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
+    return pile.cards.map(card => <div id={index} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>)
   }
 
   showAllStackPiles() {
     const piles = this.state.game.stackPiles;
     return piles.map((pile, index) => {
-      return <div id={index} onDrop={this.dropInStackPile.bind(this, index)} onDragOver={this.allowDrop.bind(this)} draggable={pile.isDraggable()} onDragStart={this.drag.bind(this)}>{this.showAllStackCards(pile)}</div>
+      return <div id={index} onDrop={this.dropInStackPile.bind(this, index)} onDragOver={this.allowDrop} className="stack">{this.showAllStackCards(pile, index)}</div>
     })
   }
-  printCard() {
+  render() {
     return <div>
       <div className="main">
         <div className="deck">
           <div className="card" onClick={this.changeCard.bind(this)}>{defaultCard.getUnicode()}</div>
-          {this.showRandomCard()}
+          {this.showTopMostCard()}
         </div>
         <div className="deck">
           {this.showAllReservedPiles()}
@@ -125,9 +127,6 @@ class App extends Component {
         {this.showAllStackPiles()}
       </div>
     </div>;
-  }
-  render() {
-    return this.printCard();
   }
 }
 
