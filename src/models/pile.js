@@ -14,6 +14,12 @@ class Pile {
   isDraggable() {
     return this.cards.length > 0;
   }
+  blockLastCard() {
+    this.getLastCard().blockCard();
+  }
+  revealLastCard() {
+    this.getLastCard().revealCard();
+  }
 }
 
 export default Pile;

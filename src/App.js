@@ -5,6 +5,7 @@ import './App.css';
 import Pile from './models/pile';
 import Game from './models/game';
 import lodash from 'lodash';
+import { join } from 'path';
 
 const defaultCard = new Card(Default);
 const emptyCard = new Card(EmptyCard);
@@ -31,7 +32,13 @@ class App extends Component {
 
   initializeStackPiles(game, range) {
     for (let index = 0; index < range; index++) {
-      game.addStackPile(new Pile);
+      const pile = new Pile();
+      for (let i = 0; i <= index; i++) {
+        pile.addCard(game.drawCard())
+        pile.blockLastCard();
+      }
+      pile.revealLastCard();
+      game.addStackPile(pile);
     }
   }
 
@@ -102,8 +109,12 @@ class App extends Component {
   }
 
   showAllStackCards(pile, index) {
-    if (pile.cards.length == 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
-    return pile.cards.map(card => <div id={index} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>)
+    const totalCards = pile.cards.length;
+    if (totalCards == 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
+    return pile.cards.map((card, i) => {
+      if (i + 1 === totalCards) card.revealCard();
+      return <div id={index} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
+    })
   }
 
   showAllStackPiles() {

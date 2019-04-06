@@ -21,6 +21,10 @@ class Game {
     this.showCardPile.addCard(this.deck.drawCard());
   }
 
+  drawCard() {
+    return this.deck.drawCard();
+  }
+
   getTopMostCard() {
     return this.showCardPile.getLastCard();
 

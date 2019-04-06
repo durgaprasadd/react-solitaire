@@ -25,15 +25,15 @@
 }
 
 .stackCard,.card {
-    width: 110px;
-    font-size: 160px;
-    height: 160px;
+    width: 129px;
+    font-size: 156px;
+    height: 171px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: white;
+    align-items: flex-end;
+    background-color: #dcfafc;
     position: relative;
-    border-radius: 5px;
+    border-radius: 20px;
     margin-left: 10px;
     border: 1px solid black;
 }
