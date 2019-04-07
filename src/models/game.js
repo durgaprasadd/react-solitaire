@@ -30,18 +30,20 @@ class Game {
 
   }
   addCardToReservedPile(id, des) {
-    if (des === "showCard") {
-      this.reservedPiles[id].addCard(this.showCardPile.drawCard());
-      return;
-    }
-    this.reservedPiles[id].addCard(this.reservedPiles[des].drawCard())
+    des = des.split("_")
+    if (des.includes("showCard"))
+      return this.reservedPiles[id].addCard(this.showCardPile.drawCard());
+    if (des.includes("reserved"))
+      return this.reservedPiles[id].addCard(this.reservedPiles[des[1]].drawCard());
+    return this.reservedPiles[id].addCard(this.stackPiles[des[1]].drawCard())
   }
   addCardToStackPile(id, des) {
-    if (des === "showCard") {
-      this.stackPiles[id].addCard(this.showCardPile.drawCard());
-      return;
-    }
-    this.stackPiles[id].addCard(this.stackPiles[des].drawCard())
+    des = des.split("_");
+    if (des.includes("showCard"))
+      return this.stackPiles[id].addCard(this.showCardPile.drawCard());
+    if (des.includes("reserved"))
+      return this.stackPiles[id].addCard(this.reservedPiles[des[1]].drawCard());
+    return this.stackPiles[id].addCard(this.stackPiles[des[1]].drawCard())
   }
 
   isDraggable(pile) {

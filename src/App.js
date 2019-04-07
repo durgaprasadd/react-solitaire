@@ -5,7 +5,6 @@ import './App.css';
 import Pile from './models/pile';
 import Game from './models/game';
 import lodash from 'lodash';
-import { join } from 'path';
 
 const defaultCard = new Card(Default);
 const emptyCard = new Card(EmptyCard);
@@ -13,7 +12,6 @@ const emptyCard = new Card(EmptyCard);
 class App extends Component {
   constructor(props) {
     super(props);
-    this.class = "hide";
     this.state = { game: this.initializeGame() };
   }
 
@@ -60,9 +58,8 @@ class App extends Component {
   }
 
 
-  dropInReservedPile(event) {
+  dropInReservedPile(destination, event) {
     event.preventDefault();
-    const destination = event.target.id;
     const src = event.dataTransfer.getData("id");
     this.setState(state => {
       const { game } = state;
@@ -100,7 +97,7 @@ class App extends Component {
     return piles.map((pile, index) => {
       let card = pile.getLastCard();
       if (!card) card = emptyCard;
-      return <div className="card" style={this.getColor(card)} id={index} onDrop={this.dropInReservedPile.bind(this)} onDragOver={this.allowDrop} draggable={pile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>
+      return <div className="card" style={this.getColor(card)} id={"reserved_" + index} onDrop={this.dropInReservedPile.bind(this, index)} onDragOver={this.allowDrop} draggable={pile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>
     })
   }
 
@@ -113,7 +110,8 @@ class App extends Component {
     if (totalCards == 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
     return pile.cards.map((card, i) => {
       if (i + 1 === totalCards) card.revealCard();
-      return <div id={index} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
+      if (card.isBlocked()) return <div className="stackCard" style={this.getColor(card)} draggable="false">{card.getUnicode()}</div>
+      return <div id={"stackPile_" + index + "_" + i} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
     })
   }
 
