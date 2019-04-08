@@ -43,7 +43,7 @@ class Game {
       return this.stackPiles[id].addCard(this.showCardPile.drawCard());
     if (des.includes("reserved"))
       return this.stackPiles[id].addCard(this.reservedPiles[des[1]].drawCard());
-    return this.stackPiles[id].addCard(this.stackPiles[des[1]].drawCard())
+    return this.stackPiles[id].addCards(this.stackPiles[des[1]].drawCards(+des[2]))
   }
 
   isDraggable(pile) {

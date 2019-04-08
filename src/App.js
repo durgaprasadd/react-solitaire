@@ -111,7 +111,7 @@ class App extends Component {
     return pile.cards.map((card, i) => {
       if (i + 1 === totalCards) card.revealCard();
       if (card.isBlocked()) return <div className="stackCard" style={this.getColor(card)} draggable="false">{card.getUnicode()}</div>
-      return <div id={"stackPile_" + index + "_" + i} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
+      return <div id={"stackPile_" + index + "_" + (totalCards-i) } className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
     })
   }
 
