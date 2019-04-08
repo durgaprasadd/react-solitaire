@@ -86,10 +86,17 @@ class App extends Component {
     })
   }
 
+  placeCard(src, noOfCards) {
+    this.setState(state => {
+      const { game } = state;
+      game.moveToPossiblePile(src, noOfCards);
+      return { game };
+    })
+  }
   showTopMostCard() {
     let card = this.state.game.getTopMostCard();
     if (!card) card = emptyCard;
-    return <div id="showCard" className="card" style={this.getColor(card)} draggable={this.state.game.showCardPile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>;
+    return <div id="showCard" onDoubleClick={this.placeCard.bind(this, "showCard")} className="card" style={this.getColor(card)} draggable={this.state.game.showCardPile.isDraggable()} onDragStart={this.drag}>{card.getUnicode()}</div>;
   }
 
   showAllReservedPiles() {
@@ -109,9 +116,12 @@ class App extends Component {
     const totalCards = pile.cards.length;
     if (totalCards === 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
     return pile.cards.map((card, i) => {
-      if (i + 1 === totalCards) card.revealCard();
+      const dblClickHandler = this.placeCard.bind(this, index, (totalCards - i));
+      if (i + 1 === totalCards) {
+        card.revealCard();
+      }
       if (card.isBlocked()) return <div className="stackCard" style={this.getColor(card)} draggable="false">{card.getUnicode()}</div>
-      return <div id={"stackPile_" + index + "_" + (totalCards - i)} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
+      return <div id={"stackPile_" + index + "_" + (totalCards - i)} onDoubleClick={dblClickHandler} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
     })
   }
 

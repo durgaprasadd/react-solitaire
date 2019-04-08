@@ -44,9 +44,7 @@ class Game {
     if (des.includes("showCard"))
       return this.addCardToReservedPileFromWaste(id);
     if (des.includes("stackPile"))
-      // return this.reservedPiles[id].addCard(this.reservedPiles[des[1]].drawCard());
       return this.addCardToFoundationFromTableau(id, des[1], +des[2]);
-    // return this.reservedPiles[id].addCard(this.stackPiles[des[1]].drawCard())
   }
 
   addCardToStackPile(id, des) {
@@ -55,7 +53,6 @@ class Game {
       return this.addCardToStackPileFromWaste(id);
     if (des.includes("reserved"))
       return this.addCardToStackPileFromFoundation(id, des[1]);
-    // return this.stackPiles[id].addCards(this.stackPiles[des[1]].drawCards(+des[2]))
     return this.addCardToTableauFromTableau(id, des[1], +des[2]);
   }
 
@@ -66,7 +63,9 @@ class Game {
     const isAlternateColor = pile.isAlternateColor(srcPile.getLastCardColor());
     if (isAddable && isAlternateColor) {
       pile.addCard(srcPile.drawCard())
+      return true;
     }
+    return false;
   }
 
   addCardToReservedPileFromWaste(id) {
@@ -76,7 +75,9 @@ class Game {
     const isSameSuit = pile.isSameSuit(srcPile.getLastCardSuit());
     if (isAddable && isSameSuit) {
       pile.addCard(srcPile.drawCard())
+      return true;
     }
+    return false;
   }
 
   addCardToStackPileFromFoundation(id, des) {
@@ -98,7 +99,9 @@ class Game {
     const isSameSuit = pile.isSameSuit(srcPile.getLastCardSuit());
     if (isAddable && isSameSuit) {
       pile.addCard(srcPile.drawCard())
+      return true;
     }
+    return false;
   }
 
   addCardToTableauFromTableau(id, des, noOfCards) {
@@ -112,6 +115,17 @@ class Game {
 
   isDraggable(pile) {
     return pile.isDraggable();
+  }
+
+  moveToPossiblePile(src, noOfCards) {
+    if (src === "showCard") {
+      let result = this.reservedPiles.some((x, id) => this.addCardToReservedPileFromWaste(id));
+      result = result || this.stackPiles.some((x, id) => this.addCardToStackPileFromWaste(id));
+      return result;
+    }
+    let result = this.reservedPiles.some((x, id) => this.addCardToFoundationFromTableau(id, src, noOfCards));
+    result = result || this.stackPiles.some((x, id) => this.addCardToTableauFromTableau(id, src, noOfCards));
+    return result;
   }
 }
 
