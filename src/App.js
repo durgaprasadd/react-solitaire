@@ -107,11 +107,11 @@ class App extends Component {
 
   showAllStackCards(pile, index) {
     const totalCards = pile.cards.length;
-    if (totalCards == 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
+    if (totalCards === 0) return <div className="stackCard">{emptyCard.getUnicode()}</div>;
     return pile.cards.map((card, i) => {
       if (i + 1 === totalCards) card.revealCard();
       if (card.isBlocked()) return <div className="stackCard" style={this.getColor(card)} draggable="false">{card.getUnicode()}</div>
-      return <div id={"stackPile_" + index + "_" + (totalCards-i) } className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
+      return <div id={"stackPile_" + index + "_" + (totalCards - i)} className="stackCard" style={this.getColor(card)} draggable={pile.isDraggable()} onDragStart={this.drag} > {card.getUnicode()}</div>
     })
   }
 

@@ -1,8 +1,8 @@
 class Card {
-  constructor({ type, color, number, unicode }) {
-    this.type = type;
+  constructor({ suit, color, value, unicode }) {
+    this.suit = suit;
     this.color = color;
-    this.number = number;
+    this.value = value;
     this.unicode = unicode;
     this.isBlockedCard = false;
     this.actualUnicode = unicode;
