@@ -61,11 +61,9 @@ class Game {
     const srcPile = this.showCardPile;
     const isAddable = pile.isAddableToStackPile(srcPile.getLastCardValue());
     const isAlternateColor = pile.isAlternateColor(srcPile.getLastCardColor());
-    if (isAddable && isAlternateColor) {
+    if (isAddable && isAlternateColor)
       pile.addCard(srcPile.drawCard())
-      return true;
-    }
-    return false;
+    return isAddable && isAlternateColor;
   }
 
   addCardToReservedPileFromWaste(id) {
@@ -73,11 +71,9 @@ class Game {
     const srcPile = this.showCardPile;
     const isAddable = pile.isAddableToReservedPile(srcPile.getLastCardValue());
     const isSameSuit = pile.isSameSuit(srcPile.getLastCardSuit());
-    if (isAddable && isSameSuit) {
+    if (isAddable && isSameSuit)
       pile.addCard(srcPile.drawCard())
-      return true;
-    }
-    return false;
+    return isAddable && isSameSuit;
   }
 
   addCardToStackPileFromFoundation(id, des) {
@@ -85,9 +81,9 @@ class Game {
     const srcPile = this.reservedPiles[des];
     const isAddable = pile.isAddableToStackPile(srcPile.getLastCardValue());
     const isAlternateColor = pile.isAlternateColor(srcPile.getLastCardColor());
-    if (isAddable && isAlternateColor) {
+    if (isAddable && isAlternateColor)
       pile.addCard(srcPile.drawCard());
-    }
+    return isAddable && isAlternateColor;
   }
 
   addCardToFoundationFromTableau(id, des, noOfCards) {
@@ -97,11 +93,9 @@ class Game {
     const srcPile = this.stackPiles[des];
     const isAddable = pile.isAddableToReservedPile(srcPile.getLastCardValue());
     const isSameSuit = pile.isSameSuit(srcPile.getLastCardSuit());
-    if (isAddable && isSameSuit) {
+    if (isAddable && isSameSuit)
       pile.addCard(srcPile.drawCard())
-      return true;
-    }
-    return false;
+    return isAddable && isSameSuit;
   }
 
   addCardToTableauFromTableau(id, des, noOfCards) {
@@ -111,6 +105,7 @@ class Game {
     const isAlternateColor = pile.isAlternateColor(srcPile.getCardColor(noOfCards));
     if (isAddable && isAlternateColor)
       pile.addCards(srcPile.drawCards(noOfCards));
+    return isAddable && isAlternateColor;
   }
 
   isDraggable(pile) {
